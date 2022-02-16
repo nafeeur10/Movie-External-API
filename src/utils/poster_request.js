@@ -1,18 +1,14 @@
 import axios from 'axios'
-import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
-    baseURL: process.env.VUE_APP_BASE_MOVIE_URL,
-    params: {
-      'api_key': getToken()
-    },
+    baseURL: process.env.VUE_APP_BASE_POSTER_URL,
     timeout: 5000 // request timeout
   })
 
 // request interceptor
 service.interceptors.request.use(config => {
-      config.url.startsWith(process.env.VUE_APP_BASE_MOVIE_URL)
+      config.url.startsWith(process.env.VUE_APP_BASE_POSTER_URL)
       return config
     },
     error => {
