@@ -5,8 +5,8 @@
     <ul class="flex flex-wrap justify-center mt-9">
         <li v-for="movie in genreMovieList.slice(0, 10)" :key="movie.id" class="w-1/4 m-3">
             <div class="bg-green-50 mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
-                <div class="sm:flex sm:items-center px-6 py-4">
-                    <img class="block rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://img.icons8.com/color/48/000000/movie-projector.png" alt="">
+                <div class="sm:flex sm:items-center">
+                    <img class="block mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" :src="posterBasePath + movie.poster_path" alt="">
                     <div class="text-center sm:text-left sm:flex-grow">
                         <div class="mb-2">
                             <p class="text-xl leading-tight">{{ movie.original_title }}</p>
@@ -21,13 +21,15 @@
 
 <script>
 import { fetchMovieListBasedOnGenres } from '../../api/genres'
+import { getPosterBaseUrl } from '../../utils/poster'
 export default {
   name: 'GenreMovieList',
   props: ['genre_id'],
   data() {
       return {
         genreMovieList: [],
-        selectedGenre: null
+        selectedGenre: null,
+        posterBasePath: ''
       }
   }, 
   methods: {
@@ -38,6 +40,7 @@ export default {
       }
   }, 
   mounted() {
+      this.posterBasePath = getPosterBaseUrl()
       this.fetchMovieListBasedOnGenres()
   }
 }
