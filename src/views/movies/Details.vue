@@ -19,25 +19,17 @@
         <hr />
         <ul class="flex flex-wrap justify-between my-9">
             <li class="w-1/4 m-3" v-for="movie in relatedMovies.slice(0,9)" :key="movie.id">
-                <a href="javascript:void(0)">
-                    <div class="bg-green-50 mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
-                        <div class="sm:flex sm:items-center">
-                            <img class="block mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" :src="posterBasePath + movie.poster_path" alt="">
-                            <div class="text-center sm:text-left sm:flex-grow">
-                                <div class="mb-2">
-                                    <p class="text-xl leading-tight">{{ movie.original_title }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>   
-                </a>
+                <movie-card :movie="movie"/>
             </li>
         </ul>
     </div>
 </template>
 <script>
+
 import { fetchMovieDetails, fetchRelatedMovies } from '../../api/movie'
 import { getPosterBaseUrl } from '../../utils/poster'
+import MovieCard from '../../components/MovieCard.vue'
+
 export default {
   name: 'MovieDetails',
   data() {
@@ -46,7 +38,10 @@ export default {
         posterBasePath: '',
         relatedMovies: []
       }
-  }, 
+  },
+  components: {
+      MovieCard
+  },
   methods: {
       async fetchMovieDetails() {
           let res = await fetchMovieDetails({

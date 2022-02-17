@@ -4,26 +4,17 @@
     <hr />
     <ul class="flex flex-wrap justify-center mt-9">
         <li v-for="movie in genreMovieList.slice(0, slicingAmount)" :key="movie.id" class="w-1/4 m-3">
-            <a href="javascript:void(0)" @click="goToMovieDetails(movie.id)">
-                <div class="bg-green-50 mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
-                    <div class="sm:flex sm:items-center">
-                        <img class="block mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" :src="posterBasePath + movie.poster_path" alt="">
-                        <div class="text-center sm:text-left sm:flex-grow">
-                            <div class="mb-2">
-                                <p class="text-xl leading-tight">{{ movie.original_title }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>   
-            </a>
+            <movie-card :movie="movie"/>
         </li>
     </ul>
     </div>
 </template>
 
 <script>
+
 import { fetchMovieListBasedOnGenres } from '../../api/genres'
-import { getPosterBaseUrl } from '../../utils/poster'
+import MovieCard from '../../components/MovieCard.vue'
+
 export default {
   name: 'GenreMovieList',
   props: ['genre_id', 'genre_name'],
@@ -31,10 +22,12 @@ export default {
       return {
         genreMovieList: [],
         selectedGenre: null,
-        posterBasePath: '',
         slicingAmount: 5
       }
-  }, 
+  },
+  components: {
+      MovieCard
+  },
   methods: {
       async fetchMovieListBasedOnGenres() {
           let res = await fetchMovieListBasedOnGenres({
@@ -46,14 +39,10 @@ export default {
           if(!isNaN(this.$route.params.genre_id)) {
               this.slicingAmount = 10
           }
-      },
-      goToMovieDetails(movie_id) {
-          this.$router.push({ path: `/movies/details/${movie_id}` })
       }
   }, 
   mounted() {
       this.setSlicingNumber()
-      this.posterBasePath = getPosterBaseUrl()
       this.fetchMovieListBasedOnGenres()
   }
 }
