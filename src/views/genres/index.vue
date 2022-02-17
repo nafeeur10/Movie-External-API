@@ -46,12 +46,14 @@ export default {
       async fetchGenresList() {
           let res = await fetchList()
           this.genresList = res.genres
+          console.log(this.genresList);
           this.selectedGenre = res.genres[0].id
           this.selectedGenreName = res.genres[0].name
       },
       getActiveGenre(genre_id, genre_name) {
           this.selectedGenre = genre_id
           this.selectedGenreName = genre_name
+          this.$router.push({ path: `/movies/${genre_id}` })
       }
   }, 
   mounted() {

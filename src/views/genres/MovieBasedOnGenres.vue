@@ -3,7 +3,7 @@
     <h2 class="my-9 text-center text-3xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">{{ genre_name }} Movies</h2>
     <hr />
     <ul class="flex flex-wrap justify-center mt-9">
-        <li v-for="movie in genreMovieList.slice(0, 5)" :key="movie.id" class="w-1/4 m-3">
+        <li v-for="movie in genreMovieList.slice(0, slicingAmount)" :key="movie.id" class="w-1/4 m-3">
             <div class="bg-green-50 mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
                 <div class="sm:flex sm:items-center">
                     <img class="block mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" :src="posterBasePath + movie.poster_path" alt="">
@@ -29,16 +29,25 @@ export default {
       return {
         genreMovieList: [],
         selectedGenre: null,
-        posterBasePath: ''
+        posterBasePath: '',
+        slicingAmount: 5
       }
   }, 
   methods: {
       async fetchMovieListBasedOnGenres() {
-          let res = await fetchMovieListBasedOnGenres({'with_genres': this.genre_id})
+          let res = await fetchMovieListBasedOnGenres({
+            'with_genres': (!isNaN(this.$route.params.genre_id)) ? this.$route.params.genre_id : this.genre_id
+          })
           this.genreMovieList = res.results
+      },
+      setSlicingNumber() {
+          if(!isNaN(this.$route.params.genre_id)) {
+              this.slicingAmount = 10
+          }
       }
   }, 
   mounted() {
+      this.setSlicingNumber()
       this.posterBasePath = getPosterBaseUrl()
       this.fetchMovieListBasedOnGenres()
   }
