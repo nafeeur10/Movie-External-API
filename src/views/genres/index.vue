@@ -4,7 +4,7 @@
     <hr />
     <ul class="flex flex-wrap justify-center mt-9">
         <li v-for="genre in genresList.slice(0, 8)" :key="genre.id" class="w-1/4 m-3">
-            <a href="javascript:void(0)" @click="getActiveGenre(genre.id)">
+            <a href="javascript:void(0)" @click="getActiveGenre(genre.id, genre.name)">
                 <div class="bg-green-50 mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
                     <div class="sm:flex sm:items-center px-6 py-4">
                         <img class="block rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://img.icons8.com/color/48/000000/movie-projector.png" alt="">
@@ -18,7 +18,12 @@
             </a>  
         </li>
     </ul>
-    <genre-based-movie-list :genre_id="selectedGenre" v-if="selectedGenre!==null" :key="selectedGenre"/>
+    <genre-based-movie-list 
+        v-if="selectedGenre!==null" 
+        :genre_id="selectedGenre" 
+        :genre_name="selectedGenreName"
+        :key="selectedGenre"
+    />
     </div>
 </template>
 
@@ -30,7 +35,8 @@ export default {
   data() {
       return {
         genresList: [],
-        selectedGenre: null
+        selectedGenre: null,
+        selectedGenreName: ''
       }
   },
   components: {
@@ -41,9 +47,11 @@ export default {
           let res = await fetchList()
           this.genresList = res.genres
           this.selectedGenre = res.genres[0].id
+          this.selectedGenreName = res.genres[0].name
       },
-      getActiveGenre(genre_id) {
+      getActiveGenre(genre_id, genre_name) {
           this.selectedGenre = genre_id
+          this.selectedGenreName = genre_name
       }
   }, 
   mounted() {
