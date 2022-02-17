@@ -4,16 +4,18 @@
     <hr />
     <ul class="flex flex-wrap justify-center mt-9">
         <li v-for="movie in genreMovieList.slice(0, slicingAmount)" :key="movie.id" class="w-1/4 m-3">
-            <div class="bg-green-50 mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
-                <div class="sm:flex sm:items-center">
-                    <img class="block mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" :src="posterBasePath + movie.poster_path" alt="">
-                    <div class="text-center sm:text-left sm:flex-grow">
-                        <div class="mb-2">
-                            <p class="text-xl leading-tight">{{ movie.original_title }}</p>
+            <a href="javascript:void(0)" @click="goToMovieDetails(movie.id)">
+                <div class="bg-green-50 mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
+                    <div class="sm:flex sm:items-center">
+                        <img class="block mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" :src="posterBasePath + movie.poster_path" alt="">
+                        <div class="text-center sm:text-left sm:flex-grow">
+                            <div class="mb-2">
+                                <p class="text-xl leading-tight">{{ movie.original_title }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>   
+                </div>   
+            </a>
         </li>
     </ul>
     </div>
@@ -44,6 +46,9 @@ export default {
           if(!isNaN(this.$route.params.genre_id)) {
               this.slicingAmount = 10
           }
+      },
+      goToMovieDetails(movie_id) {
+          this.$router.push({ path: `/movies/details/${movie_id}` })
       }
   }, 
   mounted() {
